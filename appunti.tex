@@ -1,0 +1,59 @@
+\documentclass{article}
+
+\usepackage{mathtools}
+
+\begin{document}
+
+\section{Alfabeto, Stringhe, Linguaggi}
+\subsection{Alfabeto}
+Un Alfabeto è un \textbf{insieme finito} di elementi detti \textbf{simboli} o \textbf{caratteri}.\\
+La \textbf{cardinalità} è il numero di simboli dell'alfabet.
+\subsection{Stringhe}
+La \textbf{stringa vuota} è indicata con $\epsilon$.
+\subsubsection{Operazioni sulle stringhe}
+\subparagraph{Concatenazione}
+Il simbolo è il punto $(.)$ tra stringhe:\\
+"nano.tecnologie" diventa "nanotecnologie".
+\subparagraph{Riflessione}
+Consiste nello scrivere una stringa al contrario, ovvero invertire l'ordine dei suoi simboli (caratteri).\\
+$x^R$ denota la riflessione della stringa $x$.\\
+La riflessione della concatenazione di due stringhe è la concatenazione inversa delle loro riflessioni:\\
+$(xy)^R=y^Rx^R$
+\subparagraph{Potenza m-esima}
+La potenza della stringa $x$ è al concatenazione di se stessa $m$ volte.\\
+La \textbf{potenza} ha la \textbf{precedenza} sul concatenamento:\\
+$abbc^3 = abbccc$
+\subsection{Linguaggi}
+\subsubsection{Operazioni sui linguaggi}
+\subparagraph{Concatenazione}
+Il concatenamento di due linguaggi $L_1$ ed $L_2$ (notazione $L_1L_2$) è l'insieme ottenuto
+concatenando in \textbf{tutti i modi possibili} le stringhe di $L_1$ con le stringhe di $L_2$.
+\begin{equation*}
+    L_1L_2=\{x\ |\ x=yz\ \&\ y \in L_1\ \&\ z \in L_2\}
+\end{equation*}
+$\{ab,\ abc\}\{ab,\ aa,\ cb\}=\{abab,abaa,abcb,abcab,abcaa,abccb\}$
+\section{Automi finiti ed Espressioni regolari}
+\subsection{Automi finiti}
+\subsubsection{DFA - Automa Finito Deterministico}
+È una quintupla:
+\begin{equation*}
+    A=\{Q,\Sigma,\delta,q0,F\}
+\end{equation*}
+\subparagraph*{$Q$} è un insieme finito di \textbf{stati}.
+\subparagraph*{$\Sigma$} è un alfabeto finito (\textbf{simboli in input}).
+\subparagraph*{$\delta$} è una funzione di transizione $Q\times\Sigma\rightarrow Q$
+\subparagraph*{$q0$} $\in\ Q$ è lo \textbf{stato iniziale}.
+\subparagraph*{$F$} è l'insieme degli \textbf{stati finali}.
+
+La funzione di transizione $\delta$ si può estendere alle stringhe:
+\begin{equation*}
+    \hat{\delta}:Q\times\Sigma^*\rightarrow Q
+\end{equation*}
+quindi:
+\begin{equation*}
+    \hat{\delta}(q,\epsilon)=q
+\end{equation*}
+\begin{equation*}
+    \hat{\delta}(q,xa)=\delta(\hat{\delta}(q,x),a)  
+\end{equation*}
+\end{document}
