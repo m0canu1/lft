@@ -1,6 +1,8 @@
-\documentclass{article}
+\documentclass[12pt]{extarticle}
 
 \usepackage{mathtools}
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning,arrows}
 
 \begin{document}
 
@@ -25,13 +27,22 @@ La \textbf{potenza} ha la \textbf{precedenza} sul concatenamento:\\
 $abbc^3 = abbccc$
 \subsection{Linguaggi}
 \subsubsection{Operazioni sui linguaggi}
+\subparagraph{Unione}
+\begin{equation*}
+    A\cup B = \{x|x\in A\ or\ x\in B\}
+\end{equation*}
 \subparagraph{Concatenazione}
 Il concatenamento di due linguaggi $L_1$ ed $L_2$ (notazione $L_1L_2$) è l'insieme ottenuto
 concatenando in \textbf{tutti i modi possibili} le stringhe di $L_1$ con le stringhe di $L_2$.
 \begin{equation*}
     L_1L_2=\{x\ |\ x=yz\ \&\ y \in L_1\ \&\ z \in L_2\}
 \end{equation*}
-$\{ab,\ abc\}\{ab,\ aa,\ cb\}=\{abab,abaa,abcb,abcab,abcaa,abccb\}$
+$\{ab,abc\}\{ab,aa,cb\}=\{abab,abaa,abcb,abcab,abcaa,abccb\}$
+\subparagraph{Star}
+\begin{equation*}
+    A*=\{x_1x_2x_3\dots x_k\ |\ k\geq 0\ and\ ogni\ x_i \in A\}
+\end{equation*}
+\newpage
 \section{Automi finiti ed Espressioni regolari}
 \subsection{Automi finiti}
 \subsubsection{DFA - Automa Finito Deterministico}
@@ -49,11 +60,193 @@ La funzione di transizione $\delta$ si può estendere alle stringhe:
 \begin{equation*}
     \hat{\delta}:Q\times\Sigma^*\rightarrow Q
 \end{equation*}
-quindi:
+Definizione:
 \begin{equation*}
     \hat{\delta}(q,\epsilon)=q
 \end{equation*}
 \begin{equation*}
     \hat{\delta}(q,xa)=\delta(\hat{\delta}(q,x),a)  
 \end{equation*}
+\subsubsection{NFA - Automa Finito Non-Deterministico}
+È una quintupla:
+\begin{equation*}
+    A=\{Q,\Sigma,\delta,q0,F\}
+\end{equation*}
+\subparagraph*{$Q$} è un insieme finito di \textbf{stati}.
+\subparagraph*{$\Sigma$} è un alfabeto finito (\textbf{simboli in input}).
+\subparagraph*{$\delta$} è una funzione di transizione $Q\times\Sigma\rightarrow 2^Q$
+\subparagraph*{$q0$} $\in\ Q$ è lo \textbf{stato iniziale}.
+\subparagraph*{$F$} è l'insieme degli \textbf{stati finali}.
+\subparagraph*{}
+Per semplicità possiamo estendere la definizione della funzione di transizione
+agli insiemi di stati:
+\begin{equation*}
+    \delta(\{r_1,r_2,\dots,r_k\},a)=\bigcup\{\delta(r_i,a)\ |\ i=1,2,\dots,k\}
+\end{equation*}
+La funzione di transizione $\delta$ si può estendere alle stringhe:
+\begin{equation*}
+    \hat{\delta}:Q\times\Sigma^*\rightarrow 2^Q
+\end{equation*}
+Definizione:
+\begin{equation*}
+    \hat{\delta}(q,\epsilon)=\{q\}
+\end{equation*}
+\begin{equation*}
+    \hat{\delta}(q,xa)=\bigcup_{r\in\hat{\delta}(q,x)}\delta(r,a)=\delta(\hat{\delta}(q,x),a)  
+\end{equation*}
+
+\subsection{Conversione da NFA a DFA}
+\subsubsection{Esempio 1}
+NFA:
+\begin{center}
+    \begin{tabular}{c |c c} 
+     & 0 & 1 \\
+    \hline
+    A & B & $\emptyset$\\
+    B & B & B  \\
+   \end{tabular}
+%    \\
+%    \begin{tikzpicture}[shorten >=1pt,node distance=2cm,on grid,auto]
+%       \node[state, initial] (A) {$A$};
+%       \node[state, accepting, right of=A] (B) {$B$};
+%       \draw 
+%           % (A) edge[loop above] node{0} (A)
+%           (A) edge[above] node{0} (B)
+%           (B) edge[loop above] node{0,1} (B);
+%   \end{tikzpicture}
+\end{center}
+DFA:
+\begin{center}
+    \begin{tabular}{c |c c} 
+     & 0 & 1 \\
+    \hline
+    A & B & C\\
+    % \hline
+    B & B & B  \\
+    C & C & C
+   \end{tabular}\\
+%    \begin{tikzpicture}[shorten >=1pt,node distance=2cm,on grid,auto]
+%       \node[state, initial] (A) {$A$};
+%       \node[state, accepting, right of=A] (B) {$B$};
+%       \node[state, below of=A] (C) {$C$};
+%       \draw 
+%           % (A) edge[loop above] node{0} (A)
+%           (A) edge[above] node{0} (B);
+%           (A) edge[right] node{1} (C)
+%           (B) edge[loop above] node{0,1} (B);
+%   \end{tikzpicture}
+\end{center}
+C è lo stato morto, siccome il DFA non accetta $\emptyset$.
+\\C viene inserito nella colonna degli stati perché per ogni stato possibile
+il DFA richiede un input.
+\subsubsection{Esempio 2}
+NFA:
+\begin{center}
+    \begin{tabular}{c |c c} 
+     & 0 & 1 \\
+    \hline
+    A & \{A\} & \{A,B\}\\
+    B & $\emptyset$ & $\emptyset$  \\
+   \end{tabular}
+\end{center}
+DFA:
+\begin{center}
+    \begin{tabular}{c |c c} 
+     & 0 & 1 \\
+    \hline
+    A & \{A\} & \{A,B\}\\
+    % \hline
+    AB & A$\cup \emptyset=$ \{A\} & \{AB\}
+   \end{tabular}\\
+\end{center}
+AB è uno stato singolo.
+\\AB invece di mettere B perché B non può essere raggiunto
+da nessuno degli stati precedenti.
+\\Nella riga di AB, colonna degli stati, faccio l'unione di A e B per ogni input.
+\subsubsection{Esempio 3}
+NFA:
+\begin{center}
+    \begin{tabular}{c |c c} 
+     & a & b \\
+    \hline
+    $\rightarrow$A & \{A,B\} & \{C\}\\
+    B & \{A\} & \{B\}  \\
+    \tikz\draw[thick](0,0) circle(0.3cm) node{C}; & - & \{A,B\}
+   \end{tabular}
+\end{center}
+DFA:
+\begin{center}
+    \begin{tabular}{c |c c} 
+     & 0 & 1 \\
+    \hline
+    A & AB & C\\
+    AB & AB & CB\\
+    \tikz\draw[thick](0,0) circle(0.4cm) node{BC};  & A & AB\\
+    \tikz\draw[thick](0,0) circle(0.3cm) node{C}; & D & AB\\
+    D & D & D\\
+   \end{tabular}\\
+\end{center}
+BC e C sono stati finali perché sono quelli che contengono la C, che è lo stato
+finale dell'NFA.
+
+\section{Grammatiche}
+\subsection{Derivazioni di una Grammatica}
+La Grammatica è una quadrupla $(V,T,P,S)$:
+\begin{itemize}
+    \item $V$: insieme delle \textbf{variabili} o \textbf{non terminali}
+    \item $T$: insieme dei \textbf{terminali}
+    \item $P$: insieme delle \textbf{produzioni} o \textbf{regole di riscrittura}
+    \item $S$: il simbolo \textbf{iniziale} o \textbf{assioma}. Da questo si parte, e con le regole, si generano le stringhe che formeranno il linguaggio.
+\end{itemize}
+Seguendo queste regole si generano delle stringhe che formano un linguaggio.
+\begin{itemize}
+    \item[Esempio] Consideriamo le seguente grammatica $G_1$
+    \begin{equation*}
+        G_1=(\{S,A\},\{a,b\},S,\{S \rightarrow aAb,aA \rightarrow aaAb,A\rightarrow \epsilon\})
+    \end{equation*}
+    \begin{math}
+        S \rightarrow \underline{aA}b\\
+        \rightarrow a\underline{aA}bb\\
+        \rightarrow aaa\underline{A}bbb\\
+        \rightarrow aaabbb
+    \end{math}
+\end{itemize}
+
+\subsection{Grammatiche Context-Free}
+La Grammatica Context-Free è una quadrupla $(V,\Sigma,P,S)$:
+\begin{itemize}
+    \item $V$: insieme delle \textbf{variabili} o \textbf{non terminali}
+    \item $\Sigma$: insieme dei \textbf{terminali}
+    \item $P$: insieme delle \textbf{produzioni} o \textbf{regole di riscrittura}
+    \item $S$: il simbolo \textbf{iniziale} o \textbf{assioma}. Da questo si parte, e con le regole, si generano le stringhe che formeranno il linguaggio.
+\end{itemize}
+La \textbf{quadrupla} contiene queste regole che, seguite, generano delle stringhe.\\
+L'insieme di queste \textbf{stringhe} formano il \textbf{linguaggio} $L$ generato dalla grammatica $G$:
+\begin{equation*}
+    L(G)
+\end{equation*}
+
+\subsection{Alberi Sintattici}
+Un albero è un \textbf{albero sintattico} se:
+\begin{itemize}
+    \item Ogni nodo interno è etichettato con una \textbf{variabile $V$}.
+    \item Ogni foglia è etichettata con un simbolo in $V \cup T \cup \{\epsilon\}$.
+\end{itemize}
+Il \textbf{prodotto} di un albero sintattico è la stringa di foglie da \textbf{sinistra a destra}.\\
+Le derivazioni possono essere:
+\begin{itemize}
+    \item Leftmost - si espandono per prima le \textbf{variabili} più a sinistra.
+    \item Rightmost - si espandono per prima le \textbf{variabili} più a destra.
+\end{itemize}
+Una Grammatica si dice \textbf{ambigua} se esiste \textbf{almeno una} stringa che abbia \textbf{due o più alberi} sintattici.
+
+\subsection{Automi a Pila - Pushdown Automata (PDA)}
+Un \textbf{PDA} è un modo per implementare una Context-Free Grammar in un modo simile in cui implementiamo un \textbf{Linguaggio Regolare} usando gli \textbf{Automi a Stati Finiti}.\\
+Essi hanno \textbf{più memoria} grazie allo \textbf{stack}.\\
+Un PDA ha 3 componenti:
+\begin{itemize}
+    \item Input - stringa di input
+    \item Finite Control Unit - in base all'input fa la \textbf{PUSH} o \textbf{POP} dallo \textbf{stack}
+    \item Stack (con memoria infinita)
+\end{itemize}
 \end{document}
