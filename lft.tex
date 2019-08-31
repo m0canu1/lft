@@ -279,14 +279,50 @@ dove
     \item se $A \rightarrow \alpha B \beta$ o $A \rightarrow \alpha B \beta$ e $FIRST(\beta)$ contiene $\epsilon$ allora \textbf{aggiungi} $FOLLOW(A)$ al $FOLLOW(B)$.
 \end{enumerate}
 
+\subsubsection{Insieme Guida}
+\begin{itemize}
+    \item $GUI(X) \rightarrow FIRST(X)$ oppure
+    \item $GUI(X) \rightarrow FIRST(X)\cup FOLLOW(X)$ se $\epsilon$ appartiene al $FIRST(X)$
+\end{itemize}
+
+\subsection{Parser $LL(1)$}
+\subsection{Proprietà principali delle Grammatiche $LL(1)$}
+\begin{itemize}
+    \item Non ambigua (esiste solo una derivazione left-most)
+    \item Assenza di Ricorsioni Sinistre
+\end{itemize}
+\subsubsection{Ricorsioni Sinistre}
+Si ha una \textbf{Ricorsione Sinistra} quando una variabile \textit{chiama} se stessa 
+\begin{equation*}
+    S \rightarrow Sa | b
+\end{equation*}
+\subsubsection{Fattorizzazione Sinistra}
+Si ha quando una variabile ha multiple produzioni con lo stesso prefisso
+\begin{equation*}
+    A \rightarrow \textbf{ab}c|\textbf{ab}|\textbf{ab}b
+\end{equation*}
+e si risolve così
+\begin{equation*}
+    A \rightarrow abA'
+\end{equation*}
+\begin{equation*}
+    A' \rightarrow c|\epsilon|b
+\end{equation*}
+
+
 \newpage
 
 \section{DOMANDE}
-\begin{itemize}
-    \item Cosa è un linguaggio regolare? Come si verifica?
-    \item Differenza tra linguaggi Context-Free e non? Come lo stabilisco?
-    \item Quando una grammatica è ambigua?
-    \item Quando un automa è minimo?
-    \item Quando una grammatica è LL(1)?
-\end{itemize}
+\subsection{Quando una grammatica è LL(1)?}
+Se per ogni coppia di produzioni a partire da uno stesso simbolo non terminale $A:\\
+A\rightarrow alpha$ e $A \rightarrow \beta$, si ha\\
+$GUI(A \rightarrow \alpha) \cap GUI(A \rightarrow \beta) = \Phi$.\\
+Ovvero, gli \textbf{insiemi guida} $GUI()$ di un simbolo con due produzioni distinte non coincidono (non hanno elementi in comune).
+
+\subsection{Cosa è un linguaggio regolare? Come si verifica?}
+\subsection{Differenza tra linguaggi Context-Free e non? Come lo stabilisco?}
+\subsection{Quando una grammatica è ambigua?}
+\subsection{Quando un automa è minimo?}
+\subsection{Quando una grammatica è LL(1)?}
+
 \end{document}
