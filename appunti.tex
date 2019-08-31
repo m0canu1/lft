@@ -264,7 +264,23 @@ dove
     \item $F$
 \end{itemize}
 
+\subsubsection{$FIRST(X)$ di una variabile in $LL(1)$}
+\begin{enumerate}
+    \item se $X$ è un simbolo \textbf{terminale} (lettera minuscola) allora $FIRST(X)=X$.
+    \item se $X \rightarrow \epsilon$ è una \textbf{produzione} allora \textbf{aggiungi} $FIRST(X)=\{\epsilon\}$.
+    \item se $X$ è un \textbf{non-terminale} e $X \rightarrow Y_1,Y_2\dots Y_K$ è una \textbf{produzione} allora \textbf{aggiungi} $FIRST(Y_1)$ al $FIRST(X)$
+            se $Y_1 \rightarrow \epsilon$ (deriva $\epsilon$) allora \textbf{aggiungi} $FIRST(Y_2)$ al $FIRST(X)$.
+\end{enumerate}
+
+\subsubsection{$FOLLOW(X)$ di una variabile in $LL(1)$}
+\begin{enumerate}
+    \item se $X$ è il \textbf{simbolo di start} allora $FOLLOW(X)=\$$.
+    \item se $A \rightarrow \alpha B \beta$ è una \textbf{produzione} allora $FOLLOW(B)=FIRST(\beta)$ eccetto $\epsilon$, se $B$ contiene $\epsilon$.
+    \item se $A \rightarrow \alpha B \beta$ o $A \rightarrow \alpha B \beta$ e $FIRST(\beta)$ contiene $\epsilon$ allora \textbf{aggiungi} $FOLLOW(A)$ al $FOLLOW(B)$.
+\end{enumerate}
+
 \newpage
+
 \section{DOMANDE}
 \begin{itemize}
     \item Cosa è un linguaggio regolare? Come si verifica?
