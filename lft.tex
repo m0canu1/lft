@@ -1,7 +1,8 @@
-\documentclass[12pt]{extarticle}
+\documentclass[14pt]{extarticle}
 
 \usepackage{mathtools}
 \usepackage{tikz}
+\usepackage{listings}
 \usetikzlibrary{automata,positioning,arrows}
 
 \begin{document}
@@ -52,13 +53,13 @@ $\{ab,abc\}\{ab,aa,cb\}=\{abab,abaa,abcb,abcab,abcaa,abccb\}$
 \end{equation*}
 \subparagraph*{$Q$} è un insieme finito di \textbf{stati}.
 \subparagraph*{$\Sigma$} è un alfabeto finito (\textbf{simboli in input}).
-\subparagraph*{$\delta$} è una funzione di transizione $Q\times\Sigma\rightarrow Q$
+\subparagraph*{$\delta$} è una funzione di transizione $Q\times\Sigma\implies Q$
 \subparagraph*{$q0$} $\in\ Q$ è lo \textbf{stato iniziale}.
 \subparagraph*{$F$} è l'insieme degli \textbf{stati finali}.
 
 La funzione di transizione $\delta$ si può estendere alle stringhe:
 \begin{equation*}
-    \hat{\delta}:Q\times\Sigma^*\rightarrow Q
+    \hat{\delta}:Q\times\Sigma^*\implies Q
 \end{equation*}
 Definizione:
 \begin{equation*}
@@ -74,7 +75,7 @@ Definizione:
 \end{equation*}
 \subparagraph*{$Q$} è un insieme finito di \textbf{stati}.
 \subparagraph*{$\Sigma$} è un alfabeto finito (\textbf{simboli in input}).
-\subparagraph*{$\delta$} è una funzione di transizione $Q\times\Sigma\rightarrow 2^Q$
+\subparagraph*{$\delta$} è una funzione di transizione $Q\times\Sigma\implies 2^Q$
 \subparagraph*{$q0$} $\in\ Q$ è lo \textbf{stato iniziale}.
 \subparagraph*{$F$} è l'insieme degli \textbf{stati finali}.
 \subparagraph*{}
@@ -85,7 +86,7 @@ agli insiemi di stati:
 \end{equation*}
 La funzione di transizione $\delta$ si può estendere alle stringhe:
 \begin{equation*}
-    \hat{\delta}:Q\times\Sigma^*\rightarrow 2^Q
+    \hat{\delta}:Q\times\Sigma^*\implies 2^Q
 \end{equation*}
 Definizione:
 \begin{equation*}
@@ -169,7 +170,7 @@ NFA:
     \begin{tabular}{c |c c} 
      & a & b \\
     \hline
-    $\rightarrow$A & \{A,B\} & \{C\}\\
+    $\implies$A & \{A,B\} & \{C\}\\
     B & \{A\} & \{B\}  \\
     \tikz\draw[thick](0,0) circle(0.3cm) node{C}; & - & \{A,B\}
    \end{tabular}
@@ -202,13 +203,13 @@ Seguendo queste regole si generano delle stringhe che formano un linguaggio.
 \begin{itemize}
     \item[Esempio] Consideriamo le seguente grammatica $G_1$
     \begin{equation*}
-        G_1=(\{S,A\},\{a,b\},S,\{S \rightarrow aAb,aA \rightarrow aaAb,A\rightarrow \epsilon\})
+        G_1=(\{S,A\},\{a,b\},S,\{S \implies aAb,aA \implies aaAb,A\implies \epsilon\})
     \end{equation*}
     \begin{math}
-        S \rightarrow \underline{aA}b\\
-        \rightarrow a\underline{aA}bb\\
-        \rightarrow aaa\underline{A}bbb\\
-        \rightarrow aaabbb
+        S \implies \underline{aA}b\\
+        \implies a\underline{aA}bb\\
+        \implies aaa\underline{A}bbb\\
+        \implies aaabbb
     \end{math}
 \end{itemize}
 
@@ -264,26 +265,54 @@ dove
     \item $F$
 \end{itemize}
 
-\subsubsection{$FIRST(X)$ di una variabile in $LL(1)$}
+\subsubsection{$FIRST$}
+Data una grammatica e una \textbf{stringa} $\alpha$.\\
+$FIRST(\alpha)$ è l'insieme dei \textbf{terminali} con cui \textit{iniziano} le stringhe derivabili dalla stringa data ($\alpha$).\\
+Formalmente:
+\begin{equation*}
+\end{equation*}
 \begin{enumerate}
     \item se $X$ è un simbolo \textbf{terminale} (lettera minuscola) allora $FIRST(X)=X$.
-    \item se $X \rightarrow \epsilon$ è una \textbf{produzione} allora \textbf{aggiungi} $FIRST(X)=\{\epsilon\}$.
-    \item se $X$ è un \textbf{non-terminale} e $X \rightarrow Y_1,Y_2\dots Y_K$ è una \textbf{produzione} allora \textbf{aggiungi} $FIRST(Y_1)$ al $FIRST(X)$
-            se $Y_1 \rightarrow \epsilon$ (deriva $\epsilon$) allora \textbf{aggiungi} $FIRST(Y_2)$ al $FIRST(X)$.
+    \item se $X \implies \epsilon$ è una \textbf{produzione} allora \textbf{aggiungi} $FIRST(X)=\{\epsilon\}$.
+    \item se $X$ è un \textbf{non-terminale} e $X \implies Y_1,Y_2\dots Y_K$ è una \textbf{produzione} allora \textbf{aggiungi} $FIRST(Y_1)$ al $FIRST(X)$\\
+            se $Y_1 \implies \epsilon$ (deriva $\epsilon$) allora \textbf{aggiungi} $FIRST(Y_2)$ al $FIRST(X)$.
 \end{enumerate}
 
-\subsubsection{$FOLLOW(X)$ di una variabile in $LL(1)$}
+\subsubsection{$FOLLOW$}
+Data una grammatica e una \textbf{variabile} $A$.\\
+$FOLLOW(A)$(insieme dei \textbf{seguiti}) è l'insieme dei terminali con cui \textit{iniziano} le stringhe che seguono $A$ nelle derivazioni.\\
+Formalmente:
+\begin{equation*}
+    FOLLOW(A)=\{a|S \rightarrow \star \alpha Aa\beta\} \cup \{\$|se S \rightarrow \star \alpha A\}
+\end{equation*}
 \begin{enumerate}
     \item se $X$ è il \textbf{simbolo di start} allora $FOLLOW(X)=\$$.
-    \item se $A \rightarrow \alpha B \beta$ è una \textbf{produzione} allora $FOLLOW(B)=FIRST(\beta)$ eccetto $\epsilon$, se $B$ contiene $\epsilon$.
-    \item se $A \rightarrow \alpha B \beta$ o $A \rightarrow \alpha B \beta$ e $FIRST(\beta)$ contiene $\epsilon$ allora \textbf{aggiungi} $FOLLOW(A)$ al $FOLLOW(B)$.
+    \item se $A \implies \alpha B \beta$ è una \textbf{produzione} allora $FOLLOW(B)=FIRST(\beta)$ eccetto $\epsilon$, se $B$ contiene $\epsilon$.
+    \item se $A \implies \alpha B \beta$ o $A \implies \alpha B \beta$ e $FIRST(\beta)$ contiene $\epsilon$ allora \textbf{aggiungi} $FOLLOW(A)$ al $FOLLOW(B)$.
 \end{enumerate}
 
 \subsubsection{Insieme Guida}
+L'\textbf{Insieme Guida} di una produzione (es. $A \rightarrow \alpha$) indica l'\textbf{insieme dei TERMINALI} con cui iniziano le stringhe generabili partendo dalla produzione stessa (\$ se ci si trova alla fine della parola).\\
+Sostanzialmente serve a capire quali sono le \textbf{iniziali} (terminali, ad es. $a,b,c,\dots$) delle stringhe che si possono generare da una specifica produzione.
 \begin{itemize}
-    \item $GUI(X) \rightarrow FIRST(X)$ oppure
-    \item $GUI(X) \rightarrow FIRST(X)\cup FOLLOW(X)$ se $\epsilon$ appartiene al $FIRST(X)$
+    \item $GUI(X) \implies FIRST(X)$ oppure
+    \item $GUI(X) \implies FIRST(X)\cup FOLLOW(X)$ se $\epsilon$ appartiene al $FIRST(X)$
 \end{itemize}
+
+\newpage
+
+\begin{table}
+    \centering
+    \begin{tabular}{|c|c|c|}
+                        & $FIRST$         & $FOLLOW$     \\
+    $S \implies ABCDE$     & $\{a,b,c\}$     & $\{\$\}$     \\
+    $A \implies a|\epsilon$ & $\{a,\epsilon\}$ & $\{b,c\}$    \\
+    $B \implies b|\epsilon$ & $\{b,\epsilon\}$ & $\{c\}$      \\
+    $C \implies c$         & $\{c\}$         & $\{d,e,\$\}$ \\
+    $D \implies d|\epsilon$ & $\{d,\epsilon\}$ & $\{e,\$\}$   \\
+    $E \implies e|\epsilon$ & $\{e,\epsilon\}$ & $\{\$\}$    
+    \end{tabular}
+\end{table}
 
 \subsection{Parser $LL(1)$}
 \subsection{Proprietà principali delle Grammatiche $LL(1)$}
@@ -294,29 +323,65 @@ dove
 \subsubsection{Ricorsioni Sinistre}
 Si ha una \textbf{Ricorsione Sinistra} quando una variabile \textit{chiama} se stessa 
 \begin{equation*}
-    S \rightarrow Sa | b
+    S \implies S\alpha
 \end{equation*}
-\subsubsection{Fattorizzazione Sinistra}
-Si ha quando una variabile ha multiple produzioni con lo stesso prefisso
+questo non è gestibile da un Parser Top-Down. Una produzione del seguente tipo
 \begin{equation*}
-    A \rightarrow \textbf{ab}c|\textbf{ab}|\textbf{ab}b
+    A \implies A\alpha_1|\dots|A\alpha_n|\beta_1|\dots|\beta_m
+\end{equation*}
+(le stringhe $\beta_i$ non iniziano con $A$)\\
+si può sostituire con una \textbf{fattorizzazione destra} in questo modo
+\begin{equation*}
+    \begin{aligned}
+        A \implies \beta_1A'|\dots|\beta_mA'\\        
+        A' \implies \epsilon|\alpha_1A'|\dots|\alpha_nA'
+    \end{aligned}
+\end{equation*}
+
+\subsubsection{Fattorizzazione Sinistra}
+Si ha una \textbf{Fattorizzazione Sinistra} quando una variabile ha multiple produzioni con lo stesso prefisso
+\begin{equation*}
+    A \implies \textbf{ab}c|\textbf{ab}|\textbf{ab}b
 \end{equation*}
 e si risolve così
 \begin{equation*}
-    A \rightarrow \textbf{ab}A'
-\end{equation*}
-\begin{equation*}
-    A' \rightarrow c|\epsilon|b
+    \begin{aligned}
+        A \implies \textbf{ab}A'\\
+        A' \implies c|\epsilon|b
+    \end{aligned}
 \end{equation*}
 
+\subsection{Analizzatore a Discesa Ricorsiva}
+Ad ogni variabile $A$ con produzioni
+\begin{equation*}
+    \begin{aligned}
+        A \rightarrow \alpha_1\\
+        A \rightarrow \alpha_2\\
+        \dots\\
+        A \rightarrow \alpha_k
+    \end{aligned}
+\end{equation*}
+
+si associa una procedura:
+\begin{lstlisting}[escapeinside={*}{*}]
+    function A()
+        if (cc *$\in GUI(A \rightarrow \alpha_1)$*)
+            body *$(\alpha_1)$*
+        else if (cc *$\in GUI(A \rightarrow \alpha_a)$*)
+            body *$(\alpha_a)$*
+        *\dots*
+        else if (cc *$\in GUI(A \rightarrow \alpha_k)$*)
+            body *$(\alpha_k)$*
+        else ERRORE (*\dots*)
+\end{lstlisting}
 
 \newpage
 
 \section{DOMANDE}
 \subsection{Quando una grammatica è LL(1)?}
 Se per ogni coppia di produzioni a partire da uno stesso simbolo non terminale $A:\\
-A\rightarrow alpha$ e $A \rightarrow \beta$, si ha\\
-$GUI(A \rightarrow \alpha) \cap GUI(A \rightarrow \beta) = \Phi$.\\
+A\implies alpha$ e $A \implies \beta$, si ha\\
+$GUI(A \implies \alpha) \cap GUI(A \implies \beta) = \Phi$.\\
 Ovvero, gli \textbf{insiemi guida} $GUI()$ di un simbolo con due produzioni distinte non coincidono (non hanno elementi in comune).
 
 \subsection{Cosa è un linguaggio regolare? Come si verifica?}
