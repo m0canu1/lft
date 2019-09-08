@@ -377,6 +377,7 @@ si associa una procedura:
 
 \newpage
 
+
 \section{DOMANDE}
 \subsection{Quando una grammatica è LL(1)?}
 Se per ogni coppia di produzioni a partire da uno stesso simbolo non terminale $A:\\
@@ -389,7 +390,21 @@ Ovvero, gli \textbf{insiemi guida} $GUI()$ di un simbolo con due produzioni dist
 \subsection{Quando una grammatica è ambigua?}
 Una grammatica è ambigua se almeno una frase del linguaggio generato è ambigua.\\
 Una frase è ambigua se ha almeno due \textbf{alberi sintattici} distinti.
+\subsection{Completare la definizione della funzione di transizione $\sigma_D$ dell'automa a stati finiti deterministico}
+\subsection{Quando due stati $p$ e $q$ sono indistinguibili? E i-indistinguibili?}
+Sono i-indistinguibili se e solo se nessuna stringa di lunghezza $\le i$ distingue $p$ da $q$.\\
+Sono indistinguibili se e solo se nessuna stringa (di qualunque lunghezza) distingue $p$ da $q$.
+\subsection{Due stati i-indistinguibili quando sono i+1-distinguibili?}
+Questo si verifica quando con la stessa stringa di input i due stati raggiunti appartengono a due sottoinsiemi diversi dalla Partizione i ($\Phi_i$)
 \subsection{Quando un automa è minimo?}
 \subsection{Quando una grammatica è LL(1)?}
+\subsection{Differenza tra SDD S-attribuiti e l-attribuiti}
+\begin{itemize}
+    \item S-attribuiti tutti gli attribuiti sono sintetizzati
+    \item L-attribuiti gli attribuiti possono essere sia sintetizzati che ereditati, ereditati con le seguenti regole:
+    \begin{itemize}
+        \item pagina 29/36 di 4/22-traduzione1.pdf
+    \end{itemize}
+\end{itemize}
 
 \end{document}
