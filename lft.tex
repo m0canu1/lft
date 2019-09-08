@@ -1,8 +1,11 @@
-\documentclass[14pt]{extarticle}
+\documentclass[12pt]{article}
 
 \usepackage{mathtools}
 \usepackage{tikz}
 \usepackage{listings}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\graphicspath{ {./assets/} }
 \usetikzlibrary{automata,positioning,arrows}
 
 \begin{document}
@@ -30,7 +33,7 @@ $abbc^3 = abbccc$
 \subsubsection{Operazioni sui linguaggi}
 \subparagraph{Unione}
 \begin{equation*}
-    A\cup B = \{x|x\in A\ or\ x\in B\}
+    A\cup B = \{x\ |\ x\in A\ or\ x\in B\}
 \end{equation*}
 \subparagraph{Concatenazione}
 Il concatenamento di due linguaggi $L_1$ ed $L_2$ (notazione $L_1L_2$) è l'insieme ottenuto
@@ -49,12 +52,12 @@ $\{ab,abc\}\{ab,aa,cb\}=\{abab,abaa,abcb,abcab,abcaa,abccb\}$
 \subsubsection{DFA - Automa Finito Deterministico}
 È una quintupla:
 \begin{equation*}
-    A=\{Q,\Sigma,\delta,q0,F\}
+    A=\{Q,\Sigma,\delta,q_0,F\}
 \end{equation*}
 \subparagraph*{$Q$} è un insieme finito di \textbf{stati}.
 \subparagraph*{$\Sigma$} è un alfabeto finito (\textbf{simboli in input}).
 \subparagraph*{$\delta$} è una funzione di transizione $Q\times\Sigma\implies Q$
-\subparagraph*{$q0$} $\in\ Q$ è lo \textbf{stato iniziale}.
+\subparagraph*{$q_0$} $\in\ Q$ è lo \textbf{stato iniziale}.
 \subparagraph*{$F$} è l'insieme degli \textbf{stati finali}.
 
 La funzione di transizione $\delta$ si può estendere alle stringhe:
@@ -62,21 +65,34 @@ La funzione di transizione $\delta$ si può estendere alle stringhe:
     \hat{\delta}:Q\times\Sigma^*\implies Q
 \end{equation*}
 Definizione:
+\begin{align*} 
+    \hat{\delta}(q,\epsilon)&=q\\ 
+    \hat{\delta}(q,xa)&=\delta(\hat{\delta}(q,x),a) 
+\end{align*}
+Il linguaggio riconosciuto (o accettato) da $A$ è:
 \begin{equation*}
-    \hat{\delta}(q,\epsilon)=q
+    L(A)=\{w\ |\ \hat{\delta}(q_0,w) \in F\}
 \end{equation*}
-\begin{equation*}
-    \hat{\delta}(q,xa)=\delta(\hat{\delta}(q,x),a)  
-\end{equation*}
+\textbf{I linguaggi riconosciuiti (o accettati) da AUTOMI A STATI FINITI sono chiamati \textit{linguaggi regolari}.}\\
+Esempio:
+\begin{align*}
+    \hat{\delta}(q_0, aabbc) &= \delta(\hat{\delta})q_0, aabb), c)\\ &=\delta(\delta(\hat{\delta})q_0, aab), b), c)\\ &=
+    \delta(\delta(\delta(\hat{\delta})q_0, aa), b), b), c)\\ &=\delta(\delta(\delta(\delta(\hat{\delta})q_0,a), a), b), b), c)\\ &=
+    \delta(\delta(\delta(\delta(\delta(\hat{\delta})q_0, \epsilon), a), a), b), b), c)\\ &=\delta(\delta(\delta(\delta(\delta(q_0,a), a), b), b), c)\\ &=
+    \delta(\delta(\delta(\delta(q_0,a), b), b), c)\\ &=\delta(\delta(\delta(q_0,b), b), c)\\ &=\delta(\delta(q_1,b), c)\\ &=
+    \delta(q_1,c) = q_3 
+\end{align*}
+
+
 \subsubsection{NFA - Automa Finito Non-Deterministico}
 È una quintupla:
 \begin{equation*}
-    A=\{Q,\Sigma,\delta,q0,F\}
+    A=\{Q,\Sigma,\delta,q_0,F\}
 \end{equation*}
 \subparagraph*{$Q$} è un insieme finito di \textbf{stati}.
 \subparagraph*{$\Sigma$} è un alfabeto finito (\textbf{simboli in input}).
 \subparagraph*{$\delta$} è una funzione di transizione $Q\times\Sigma\implies 2^Q$
-\subparagraph*{$q0$} $\in\ Q$ è lo \textbf{stato iniziale}.
+\subparagraph*{$q_0$} $\in\ Q$ è lo \textbf{stato iniziale}.
 \subparagraph*{$F$} è l'insieme degli \textbf{stati finali}.
 \subparagraph*{}
 Per semplicità possiamo estendere la definizione della funzione di transizione
@@ -89,12 +105,10 @@ La funzione di transizione $\delta$ si può estendere alle stringhe:
     \hat{\delta}:Q\times\Sigma^*\implies 2^Q
 \end{equation*}
 Definizione:
-\begin{equation*}
-    \hat{\delta}(q,\epsilon)=\{q\}
-\end{equation*}
-\begin{equation*}
-    \hat{\delta}(q,xa)=\bigcup_{r\in\hat{\delta}(q,x)}\delta(r,a)=\delta(\hat{\delta}(q,x),a)  
-\end{equation*}
+\begin{gather*}
+    \hat{\delta}(q,\epsilon)=\{q\}\\
+    \hat{\delta}(q,xa)=\bigcup_{r\in\hat{\delta}(q,x)}\delta(r,a)=\delta(\hat{\delta}(q,x),a) 
+\end{gather*}
 
 \subsection{Conversione da NFA a DFA}
 \subsubsection{Esempio 1}
@@ -106,15 +120,6 @@ NFA:
     A & B & $\emptyset$\\
     B & B & B  \\
    \end{tabular}
-%    \\
-%    \begin{tikzpicture}[shorten >=1pt,node distance=2cm,on grid,auto]
-%       \node[state, initial] (A) {$A$};
-%       \node[state, accepting, right of=A] (B) {$B$};
-%       \draw 
-%           % (A) edge[loop above] node{0} (A)
-%           (A) edge[above] node{0} (B)
-%           (B) edge[loop above] node{0,1} (B);
-%   \end{tikzpicture}
 \end{center}
 DFA:
 \begin{center}
@@ -122,20 +127,10 @@ DFA:
      & 0 & 1 \\
     \hline
     A & B & C\\
-    % \hline
     B & B & B  \\
     C & C & C
    \end{tabular}\\
-%    \begin{tikzpicture}[shorten >=1pt,node distance=2cm,on grid,auto]
-%       \node[state, initial] (A) {$A$};
-%       \node[state, accepting, right of=A] (B) {$B$};
-%       \node[state, below of=A] (C) {$C$};
-%       \draw 
-%           % (A) edge[loop above] node{0} (A)
-%           (A) edge[above] node{0} (B);
-%           (A) edge[right] node{1} (C)
-%           (B) edge[loop above] node{0,1} (B);
-%   \end{tikzpicture}
+
 \end{center}
 C è lo stato morto, siccome il DFA non accetta $\emptyset$.
 \\C viene inserito nella colonna degli stati perché per ogni stato possibile
@@ -156,7 +151,6 @@ DFA:
      & 0 & 1 \\
     \hline
     A & \{A\} & \{A,B\}\\
-    % \hline
     AB & A$\cup \emptyset=$ \{A\} & \{AB\}
    \end{tabular}\\
 \end{center}
@@ -190,6 +184,44 @@ DFA:
 BC e C sono stati finali perché sono quelli che contengono la C, che è lo stato
 finale dell'NFA.
 
+\subsection{Espressioni Regolari}
+Una espressione regolare è un modo \textit{dichiarativo} per descrivere un  linguaggio regolare (ne fornisce una descrizione algebrica).\\
+Esempio: 01 + 10\\
+Un \textbf{Linguaggio regolare} su un alfabeto $\Sigma$ è un linguaggio che può essere espresso mediante:
+\begin{itemize}
+    \item Chiusura $(*)$
+    \item Concatenazione $(.)$
+    \item Unione $(+)$
+\end{itemize}
+Esempi:
+\begin{itemize}
+    \item $ab+bca$ \textbf{denota l'insieme} $\{ab, bca\}$  
+    \item $ab^*$  \textbf{denota l'insieme} $\{abn | n \ge 0\}$ 
+    \item $(ab)^++bca$ \textbf{denota l'insieme} $\{bca\} \cup {(ab)n | n > 0}$  
+    \item $(aa)^*$ \textbf{denota l'insieme} $\{a2n |  n \ge 0\}$
+    \item $(aa)^*a$ \textbf{denota l'insieme} $\{a2n+1 | n \ge 0\}$
+    \item $(a+b+(cc)^*)^*$ \textbf{denota l'insieme} \dots (esercizio!) 
+    \item $1(0+1)^*+0$ \textbf{denota i numeri binari}
+\end{itemize} 
+
+\subsubsection{Da espressione regolare ad automa}
+\subsubsection*{Unione}
+\includegraphics[scale=0.07]{assets/unione.png}
+\subsubsection*{Concatenazione}
+\includegraphics[scale=0.07]{assets/concatenazione.png}
+\subsubsection*{Chiusura}
+\includegraphics[scale=0.07]{assets/chiusura.png}
+
+\subsubsection{Pumping Lemma}
+
+Sia $L$ un linguaggio regolare.\\
+Allora $\exists n$, che dipende solo dal linguaggio, tale che $\forall w \in L,\ |w| \ge n, w$ si può scrivere come la concatenazione di tre  sottostringhe $xyz$ tali che:
+\begin{gather*}
+    y\neq \epsilon\\
+    |xy| \leq n \\
+    \forall k \geq 0,\ xy^kz \in L
+\end{gather*}
+
 \section{Grammatiche}
 \subsection{Derivazioni di una Grammatica}
 La Grammatica è una quadrupla $(V,T,P,S)$:
@@ -205,12 +237,12 @@ Seguendo queste regole si generano delle stringhe che formano un linguaggio.
     \begin{equation*}
         G_1=(\{S,A\},\{a,b\},S,\{S \implies aAb,aA \implies aaAb,A\implies \epsilon\})
     \end{equation*}
-    \begin{math}
-        S \implies \underline{aA}b\\
-        \implies a\underline{aA}bb\\
-        \implies aaa\underline{A}bbb\\
-        \implies aaabbb
-    \end{math}
+    \begin{align*}
+        S &\implies \underline{aA}b\\
+        &\implies a\underline{aA}bb\\
+        &\implies aaa\underline{A}bbb\\
+        &\implies aaabbb
+    \end{align*}
 \end{itemize}
 
 \subsection{Grammatiche Context-Free}
@@ -252,17 +284,17 @@ Un PDA ha 3 componenti:
 \end{itemize}
 \textbf{PDA} è una tupla di 7 elementi:
 \begin{equation*}
-    P=(Q,\Sigma,\Gamma,\Delta,q_0,Z_0,F)
+    P=(Q,\Sigma,\Gamma,\delta,q_0,Z_0,F)
 \end{equation*}
 dove
 \begin{itemize}
-    \item $Q$
-    \item $\Sigma$
-    \item $\Gamma$
-    \item $\Delta$ è la funzione di transizione
-    \item $q_0$
-    \item $Z_0$
-    \item $F$
+    \item $Q$ è un insieme finito di stati
+    \item $\Sigma$ è un alfabeto finito di input
+    \item $\Gamma$ è un alfabeto finito di pila
+    \item $\delta$ è la funzione di transizione
+    \item $q_0$ è lo stato iniziale
+    \item $Z_0 \in \Gamma$ è il simbolo iniziale per la pila
+    \item $F \subseteq Q$ è l'insieme di stati di accettazione  
 \end{itemize}
 
 \subsubsection{$FIRST$}
@@ -270,6 +302,7 @@ Data una grammatica e una \textbf{stringa} $\alpha$.\\
 $FIRST(\alpha)$ è l'insieme dei \textbf{terminali} con cui \textit{iniziano} le stringhe derivabili dalla stringa data ($\alpha$).\\
 Formalmente:
 \begin{equation*}
+    FIRST(\alpha) = \{a\ |\ \alpha \rightarrow^*a\beta\} \cup \{\epsilon\ |\ se\  \alpha \rightarrow^*\epsilon\}
 \end{equation*}
 \begin{enumerate}
     \item se $X$ è un simbolo \textbf{terminale} (lettera minuscola) allora $FIRST(X)=X$.
@@ -283,7 +316,7 @@ Data una grammatica e una \textbf{variabile} $A$.\\
 $FOLLOW(A)$(insieme dei \textbf{seguiti}) è l'insieme dei terminali con cui \textit{iniziano} le stringhe che seguono $A$ nelle derivazioni.\\
 Formalmente:
 \begin{equation*}
-    FOLLOW(A)=\{a|S \rightarrow \star \alpha Aa\beta\} \cup \{\$|se S \rightarrow \star \alpha A\}
+    FOLLOW(A)=\{a\ |\ S \rightarrow^* \alpha Aa\beta\} \cup \{\$\ |\ se\ S \rightarrow^*\alpha A\}
 \end{equation*}
 \begin{enumerate}
     \item se $X$ è il \textbf{simbolo di start} allora $FOLLOW(X)=\$$.
@@ -295,22 +328,22 @@ Formalmente:
 L'\textbf{Insieme Guida} di una produzione (es. $A \rightarrow \alpha$) indica l'\textbf{insieme dei TERMINALI} con cui iniziano le stringhe generabili partendo dalla produzione stessa (\$ se ci si trova alla fine della parola).\\
 Sostanzialmente serve a capire quali sono le \textbf{iniziali} (terminali, ad es. $a,b,c,\dots$) delle stringhe che si possono generare da una specifica produzione.
 \begin{itemize}
-    \item $GUI(X) \implies FIRST(X)$ oppure
-    \item $GUI(X) \implies FIRST(X)\cup FOLLOW(X)$ se $\epsilon$ appartiene al $FIRST(X)$
+    \item $GUI(A \rightarrow \alpha) \implies FIRST(\alpha)$ oppure
+    \item $GUI(A \rightarrow \alpha) \implies FIRST(\alpha)\cup FOLLOW(A)$ se $\epsilon$ appartiene al $FIRST(A)$
 \end{itemize}
 
 \newpage
 
 \begin{table}
     \centering
-    \begin{tabular}{|c|c|c|}
+    \begin{tabular}{|l|c|c|}
                         & $FIRST$         & $FOLLOW$     \\
     $S \implies ABCDE$     & $\{a,b,c\}$     & $\{\$\}$     \\
-    $A \implies a|\epsilon$ & $\{a,\epsilon\}$ & $\{b,c\}$    \\
-    $B \implies b|\epsilon$ & $\{b,\epsilon\}$ & $\{c\}$      \\
+    $A \implies a\ |\ \epsilon$ & $\{a,\epsilon\}$ & $\{b,c\}$    \\
+    $B \implies b\ |\ \epsilon$ & $\{b,\epsilon\}$ & $\{c\}$      \\
     $C \implies c$         & $\{c\}$         & $\{d,e,\$\}$ \\
-    $D \implies d|\epsilon$ & $\{d,\epsilon\}$ & $\{e,\$\}$   \\
-    $E \implies e|\epsilon$ & $\{e,\epsilon\}$ & $\{\$\}$    
+    $D \implies d\ |\ \epsilon$ & $\{d,\epsilon\}$ & $\{e,\$\}$   \\
+    $E \implies e\ |\ \epsilon$ & $\{e,\epsilon\}$ & $\{\$\}$    
     \end{tabular}
 \end{table}
 
@@ -327,27 +360,27 @@ Si ha una \textbf{Ricorsione Sinistra} quando una variabile \textit{chiama} se s
 \end{equation*}
 questo non è gestibile da un Parser Top-Down. Una produzione del seguente tipo
 \begin{equation*}
-    A \implies A\alpha_1|\dots|A\alpha_n|\beta_1|\dots|\beta_m
+    A \implies A\alpha_1\ |\ \dots\ |\ A\alpha_n\ |\ \beta_1\ |\ \dots\ |\ \beta_m
 \end{equation*}
 (le stringhe $\beta_i$ non iniziano con $A$)\\
 si può sostituire con una \textbf{fattorizzazione destra} in questo modo
 \begin{equation*}
     \begin{aligned}
-        A \implies \beta_1A'|\dots|\beta_mA'\\        
-        A' \implies \epsilon|\alpha_1A'|\dots|\alpha_nA'
+        A &\implies \beta_1A'\ |\ \dots\ |\ \beta_mA'\\        
+        A' &\implies \epsilon\ |\ \alpha_1A'\ |\ \dots\ |\ \alpha_nA'
     \end{aligned}
 \end{equation*}
 
 \subsubsection{Fattorizzazione Sinistra}
 Si ha una \textbf{Fattorizzazione Sinistra} quando una variabile ha multiple produzioni con lo stesso prefisso
 \begin{equation*}
-    A \implies \textbf{ab}c|\textbf{ab}|\textbf{ab}b
+    A \implies \textbf{ab}c\ |\ \textbf{ab}\ |\ \textbf{ab}b
 \end{equation*}
 e si risolve così
 \begin{equation*}
     \begin{aligned}
-        A \implies \textbf{ab}A'\\
-        A' \implies c|\epsilon|b
+        A &\implies \textbf{ab}A'\\
+        A' &\implies c\ |\ \epsilon\ |\ b
     \end{aligned}
 \end{equation*}
 
@@ -387,6 +420,8 @@ Ovvero, gli \textbf{insiemi guida} $GUI()$ di un simbolo con due produzioni dist
 
 \subsection{Cosa è un linguaggio regolare? Come si verifica?}
 \subsection{Differenza tra linguaggi Context-Free e non? Come lo stabilisco?}
+Regular grammar is either right or left linear, whereas context free grammar is basically any combination of terminals and non-terminals. 
+Hence you can see that regular grammar is a subset of context-free grammar.
 \subsection{Quando una grammatica è ambigua?}
 Una grammatica è ambigua se almeno una frase del linguaggio generato è ambigua.\\
 Una frase è ambigua se ha almeno due \textbf{alberi sintattici} distinti.
@@ -395,16 +430,42 @@ Una frase è ambigua se ha almeno due \textbf{alberi sintattici} distinti.
 Sono i-indistinguibili se e solo se nessuna stringa di lunghezza $\le i$ distingue $p$ da $q$.\\
 Sono indistinguibili se e solo se nessuna stringa (di qualunque lunghezza) distingue $p$ da $q$.
 \subsection{Due stati i-indistinguibili quando sono i+1-distinguibili?}
-Questo si verifica quando con la stessa stringa di input i due stati raggiunti appartengono a due sottoinsiemi diversi dalla Partizione i ($\Phi_i$)
+Questo si verifica quando con la stessa stringa di input i due stati raggiunti appartengono a due sottoinsiemi diversi dalla Partizione i ($\Pi_i$)
 \subsection{Quando un automa è minimo?}
+Un automa è minimo quando la partizione degli stati contiene i gruppi degli stati indistinguibili.
 \subsection{Quando una grammatica è LL(1)?}
+Una grammatica è $LL(1)$ se per ogni non terminale $A$ e per ogni coppia di produzioni
+\begin{align*}
+    A &\rightarrow \alpha\\
+    A &\rightarrow \beta
+\end{align*}
+gli insiemi guida sono disgiunti:
+\begin{align*}
+    GUI(A \rightarrow \alpha) \cap GUI(A \rightarrow \beta) = \Phi
+\end{align*}
+Una grammatica \textbf{non può essere} $LL(1)$ se è \textbf{ricorsiva sinistra}.\\
+Perché l'intersezione degli
+insiemi $GUI$ delle produzioni sono uguali.
 \subsection{Differenza tra SDD S-attribuiti e l-attribuiti}
 \begin{itemize}
-    \item S-attribuiti tutti gli attribuiti sono sintetizzati
-    \item L-attribuiti gli attribuiti possono essere sia sintetizzati che ereditati, ereditati con le seguenti regole:
+    \item $S-$attribuiti tutti gli attribuiti sono sintetizzati
+    \item $L-$attribuiti gli attribuiti possono essere sia sintetizzati che ereditati, ereditati con le seguenti regole:
     \begin{itemize}
         \item pagina 29/36 di 4/22-traduzione1.pdf
     \end{itemize}
 \end{itemize}
-
+\subsection{MEMO}
+\textbf{I Linguaggi Regolari sono sottoinsiemi dei CFG (Context Free Grammar)}.\\
+Linguaggi context free (generati da CFG) riconosciuti da
+\begin{itemize}
+    \item PDA
+    \item NPDA
+\end{itemize}
+Linguaggi regolari riconosciuiti da
+\begin{itemize}
+    \item DFA
+    \item NFA
+    \item $\epsilon$-NFA % 
+    \smash{\raisebox{.3\dimexpr3\baselineskip+6\itemsep+2\parskip}{$\left.\rule{0pt}{.5\dimexpr3\baselineskip+3\itemsep+3\parskip}\right\}\text{Riconoscono linguaggi regolari}$}}
+  \end{itemize}
 \end{document}
