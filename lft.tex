@@ -8,6 +8,9 @@
 \graphicspath{ {./assets/} }
 \usetikzlibrary{automata,positioning,arrows}
 
+\newcounter{question}
+\setcounter{question}{0}
+
 \begin{document}
 
 \section{Alfabeto, Stringhe, Linguaggi}
@@ -408,6 +411,41 @@ si associa una procedura:
         else ERRORE (*\dots*)
 \end{lstlisting}
 
+\section{Traduzione Diretta della Sintassi}
+\subsection{Attributi Ereditati o Sintetizzati}
+\subparagraph*{Sintetizzati}
+Un attributo sintetizzato per una variabile $A$ in un nodo $n$ dell’albero di parsificazione 
+è definito da una regola semantica associata alla produzione in $n$, e il suo valore è calcolato
+solo in termini dei valori degli attributi nei nodi figli di $n$ ed in $n$ stesso. ($A$ è il simbolo a sinistra nella produzione).
+\begin{equation*}
+    E \rightarrow E_1 + T\  \{E.val = E_1.val + T.val\}
+\end{equation*}
+\subparagraph*{Ereditati}
+Un attributo ereditato per una variabile $A$ in un nodo $n$ dell’albero di parsificazione è definito
+da una regola semantica associata alla produzione nel nodo padre di $n$ e il suo valore è calcolato
+solo in termini dei valori degli attributi del padre di $n$, di $n$ stesso e dei suoi fratelli. 
+($A$ è un simbolo nel corpo della produzione, cioè al membro  destro).
+\begin{equation*}
+    A \rightarrow BCD \{ C.in = A.in,\ C.type = B.type \} 
+\end{equation*}
+
+\subsection{Definizioni $S$-attribuite ed $L$-attribuite}
+\subparagraph*{$S$-attribuite}
+Una \textbf{SDD} è $S$-attribuita se tutti gli attributi sono sintetizzati.
+\subparagraph*{$L$-attribuite}
+Una \textbf{SDD} è $L$-attribuita se gli attribuiti sono:
+\begin{itemize}
+    \item \textbf{sintetizzati} oppure
+    \item \textbf{ereditati} e soddisfano il seguente vincolo:\\
+    per ogni produzione $A \rightarrow X_1, X_2, \dots, X_n$ ogni attributo ereditato di $X_j$ dipende solo da:
+    \begin{itemize}
+        \item attributi ereditati o sintetizzati dei simboli $X_1,X_2, \dots, X_{j-1}$ a sinistra di $X_j$ nella produzione
+        \item attributi ereditati di $A$
+        \item attributi ereditati o sintetizzati di $X_j$ purché non vi siano cicli nel grafo delle dipendenze formati dagli attributi di questa occorrenza di $X_j$.
+        \\ \textbf{Cioè nel grafo delle dipendenze gli archi tra gli attributi associati a una produzione possono andare da sinistra a destra, ma non da destra a sinistra.}
+    \end{itemize}
+\end{itemize}
+
 \newpage
 
 
@@ -468,4 +506,82 @@ Linguaggi regolari riconosciuiti da
     \item $\epsilon$-NFA % 
     \smash{\raisebox{.3\dimexpr3\baselineskip+6\itemsep+2\parskip}{$\left.\rule{0pt}{.5\dimexpr3\baselineskip+3\itemsep+3\parskip}\right\}\text{Riconoscono linguaggi regolari}$}}
   \end{itemize}
+
+\section{Domande PDF}
+\subsection{Parte I}
+
+\newcommand\Que[1]{%
+   \leavevmode\par
+   \stepcounter{question}
+   \noindent
+   \thequestion. \textbf{#1}\par}
+
+\newcommand\Ans[2][]{%
+    \leavevmode\par\noindent
+   {\leftskip37pt
+    \textbf{#1}#2\par}}
+
+    \Que{ Cos'è un alfabeto?}
+    \Ans{Un insieme di simboli con cui comporre stringhe}
+    \Que{ Cos'è una stringa?}
+    \Ans{Un'insieme di simboli (tra quelli dell'alfabeto) che rispetta le regole di costruzione di una certe grammatica}
+    \Que{ Quando due stringhe sono uguali?}
+    \Ans{Se i loro caratteri, letti ordinatamente da sx a dx, coincidono.}
+    \Que{ Cos'è una sottostringa?}
+    \Ans{La stringa $Y$ è una sottostringa della stringa $X$ se esistono delle stringhe $U$ e $V$ tali che\\
+    $X = UYV$}
+    \Que{ Cos'è un prefisso?}
+    \Ans{La stringa Y è un prefisso della stringa X se esiste una stringa $V$ tale che $X = YV$}
+    \Que{ Cos'è un suffisso?}
+    \Ans{La stringa Y è un suffisso della stringa X se esiste una stringa $U$ tale che $X = UY$}
+    \Que{ Cos'è la concatenazione? Quali proprietà ha?}
+    \Ans{La concatenazione di due stringhe è la stringa formata dai simboli della prima stringa seguiti da quelli della seconda.\\
+    \begin{itemize}
+        \item NON è commutativa
+        \item E' associativa
+        \item HA un ELEMENTO NEUTRO
+        \item la lunghezza della stringa concatenazione è la somma delle lunghezze delle due stringhe.
+    \end{itemize}}
+    \Que{ Cos'è la riflessione? Quali proprietà ha?}
+    \Ans{La riflessione è la stringa ottenuta scrivendo i caratteri in ordine inverso.\\
+    Il riflesso del riflesso  di una stringa è la stringa stessa\\
+    La riflessione della concatenazione di due stringhe è la concatenazione inversa delle loro riflessioni.\\
+    La riflessione della stringa vuota è la stringa vuota\\
+    La riflessione ha la precedenza sul concatenamento.}
+    \Que{ Cos'è la potenza?}
+    \Ans{La potenza n-esima della stringa $X$ è il concatenamento di $X$ con se stessa $n$ volte.}
+    \Que{Cos'è un linguaggio?}
+    \Ans{Un linguaggio è un insieme di stringhe su quell'alfabeto}
+    \Que{Cos'è l'insieme dei prefissi?}
+    
+    \Que{ Quando un linguaggio è privo di prefissi?}
+    \Ans{Se non contiene i prefissi delle sue stringhe.\\
+        $L \cap$ Prefissi $(L) = \Phi$}
+    \Que{ Cosa sono la riflessione, la concatenazione e la potenza di un linguaggio?}
+    \Ans{
+    \begin{itemize}
+        \item La riflessione di un linguaggio $L$ è l'insieme delle stringhe riflesse di $L$
+        \item La concatenazione di  due linguaggi $L1$ e $L2$ è l'insieme ottenuto concatenando in tutti i modi possibili le stringhe di $L1$ con le stringhe di $L2$
+        \item La potenza n-esima di un linguaggio $L$ è il concatenamento di $L$ con se stesso $n$ volte.
+    \end{itemize}}    
+    \Que{ Cos'è la chiusura di Kleene di un linguaggio $L$? Quali proprietà ha?}
+    \Ans{E' l'unione di tutte le potenze di $L$.\\
+    Le proprietà:
+    \begin{itemize}
+        \item monotonia
+        \item chiusura rispetto al concatenamento
+        \item idempotenza
+        \item commutatività della riflessione con la chiusura di Kleene e con la potenza.
+    \end{itemize}}
+    \Que{ Che cos'è la chiusura non riflessiva?}
+    \Ans{E' l'unione di tutte le potenze positive di $L$}
+    \Que{ Che cos'è il linguaggio universale su un alfabeto $\Sigma$ ?}
+    \Ans{E' la sua chiusura di Kleene.}
+    \Que{ Che cos'è il complemento di un linguaggio $L$ su un alfabeto $\Sigma$   rispetto ad un alfabeto $\Delta$?}
+        \Ans{E' la differenza tra $\Delta^*$ ed L}
+
+
+\subsection{Parte II}
+
+
 \end{document}
