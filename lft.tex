@@ -187,6 +187,15 @@ DFA:
 BC e C sono stati finali perché sono quelli che contengono la C, che è lo stato
 finale dell'NFA.
 
+\subsection{Conversione da $\epsilon$-NFA a NFA}
+Per convertire da $\epsilon$-NFA a NFA bisogna usare la $\epsilon$\textbf{-chiusura}.\\
+\subparagraph*{$\epsilon$-chiusura}La $\epsilon$\textbf{-chiusura} indica tutti gli stati raggiungibili da un determinato stato \textbf{solo}
+con l'inserimento di $\epsilon$ (carattere vuoto). 
+\subparagraph*{Stati Finali} Diventano stati finali
+tutti quelli che, tramite la lettura di $\epsilon$, raggiungono lo stato finale dell'$\epsilon$-NFA.
+
+Il \textbf{numero degli stati} rimane \textbf{uguale}.
+\textbf{Incrementa} il numero degli stati \textbf{finali}.
 \subsection{Espressioni Regolari}
 Una espressione regolare è un modo \textit{dichiarativo} per descrivere un  linguaggio regolare (ne fornisce una descrizione algebrica).\\
 Esempio: 01 + 10\\
@@ -445,7 +454,16 @@ Una \textbf{SDD} è $L$-attribuita se gli attribuiti sono:
         \\ \textbf{Cioè nel grafo delle dipendenze gli archi tra gli attributi associati a una produzione possono andare da sinistra a destra, ma non da destra a sinistra.}
     \end{itemize}
 \end{itemize}
-
+Esempio:
+\begin{align*}
+   &P_1:\ S \rightarrow MN\ \{S.val= M.val + N.val\}\\
+   &P_2:\ M \rightarrow PQ\ \{M.val = P.val * Q.val\  and\ P.val =Q.val\} 
+\end{align*}
+$P_1$ è $L$-attribuita, invece $P_2$ non lo è.\\
+In $P_1$, $S$ è un attributo \textbf{sintetizzato} e nelle definizioni 
+$L$-attribuite è permesso.\\ 
+Invece $P_2$ non rispetta la definizione $L$-attribuita  
+siccome $P$ dipende da $Q$ che è alla sua \textbf{destra}.
 \newpage
 
 
@@ -506,6 +524,8 @@ Linguaggi regolari riconosciuiti da
     \item $\epsilon$-NFA % 
     \smash{\raisebox{.3\dimexpr3\baselineskip+6\itemsep+2\parskip}{$\left.\rule{0pt}{.5\dimexpr3\baselineskip+3\itemsep+3\parskip}\right\}\text{Riconoscono linguaggi regolari}$}}
   \end{itemize}
+\subparagraph*{Minimizzazione Automi}
+Per Minimizzare NFA occorre prima convertirli in DFA e poi minimizzare il DFA.
 
 \section{Domande PDF}
 \subsection{Parte I}
