@@ -490,6 +490,20 @@ solo in termini dei valori degli attributi del padre di $n$, di $n$ stesso e dei
     A \rightarrow BCD \{ C.in = A.in,\ C.type = B.type \} 
 \end{equation*}
 
+\begin{equation*}
+    A \rightarrow X_1,X_2,\dots,X_n
+\end{equation*}
+\subparagraph*{Sintetizzati}
+L’attributo di $A$ è di tipo sintetizzato se il suo
+valore dipende dal valore degli attributi dei
+simboli $X_1,X_2,\dots,X_n$ della parte destra della
+produzione (S-Attributi)
+\subparagraph*{Ereditati}
+L’attributo di $X_i$ è di tipo ereditato se il suo
+valore dipende dal valore degli attributi degli
+altri simboli della parte destra della produzione e
+\textbf{dal valore dell'attributo di A}.
+
 \subsection{Definizioni $S$-attribuite ed $L$-attribuite}
 \subparagraph*{$S$-attribuite}
 Una \textbf{SDD} è $S$-attribuita se tutti gli attributi sono sintetizzati.
