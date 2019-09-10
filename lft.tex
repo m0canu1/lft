@@ -309,7 +309,59 @@ dove
     \item $F \subseteq Q$ è l'insieme di stati di accettazione  
 \end{itemize}
 
-\subsubsection{$FIRST$}
+\subsubsection{Diagrammi di transizione}
+Un PDA può essere rappresentato da un diagramma di transizione in cui le etichette
+sono della forma
+\begin{equation*}
+    a,X/\gamma
+\end{equation*}
+in cui
+\begin{itemize}
+    \item $a$ è il simbolo di \textbf{input}
+    \item $X$ è la \textbf{cima della pila}
+    \item $\gamma$ è la stringa che sostituisce $X$ sulla pila
+\end{itemize}
+
+\subsubsection{Descrizioni istantanee}
+Un PDA passa da una configurazione ad un’altra
+configurazione consumando un simbolo di input usando le \textbf{descrizioni istantanee} (ID) del PDA. 
+Una ID e’ una tripla $(q, w, \gamma)$ dove
+\begin{itemize}
+    \item $q$ è lo stato in cui si trova l'automa
+    \item $w$ è l'input rimanente (es. 0010). Lettura da sinistra a destra.
+    \item $\gamma$ è il contenuto della pila (es. $ZZZ_0$)
+\end{itemize}
+
+\subsubsection{Da CFG a PDA}
+Sia $G=(V,T,Q,S)$ una CFG. Definiamo $P_G$ come
+\begin{equation*}
+    (\{q\},T,V \cup T,\delta,q,S)
+\end{equation*}
+dove
+\begin{equation*}
+    \delta(q,\epsilon A) = \{(q,\beta)\ :\ A \rightarrow \beta \in Q\}
+\end{equation*}
+per $A \in V$, e
+\begin{equation*}
+    \delta(q,a,a)=\{(q,\epsilon)\}
+\end{equation*}
+per $a \in T$.\\
+Example
+\begin{equation*}
+    S \rightarrow aSbS\ |\ bSaS\ |\ \epsilon
+\end{equation*}
+è definito da
+\begin{align*}
+    &\delta(q,\epsilon,S)=\{(q,aSbS),(q,bSaS),(q,\epsilon)\}\\
+    &\delta(q,a,a)=\{(q,\epsilon)\}\\
+    &\delta(q,b,b)=\{(q,\epsilon)\}\\
+\end{align*}
+per esempio:
+\begin{align*}
+    (q,ab,S)\vdash(q,ab,aSbS)\vdash(q,b,SbS)\vdash(q,b,bS)\vdash(q,\epsilon,S)\vdash(q,\epsilon,\epsilon)
+\end{align*}
+
+\subsection{$FIRST$}
 Data una grammatica e una \textbf{stringa} $\alpha$.\\
 $FIRST(\alpha)$ è l'insieme dei \textbf{terminali} con cui \textit{iniziano} le stringhe derivabili dalla stringa data ($\alpha$).\\
 Formalmente:
@@ -323,7 +375,7 @@ Formalmente:
             se $Y_1 \implies \epsilon$ (deriva $\epsilon$) allora \textbf{aggiungi} $FIRST(Y_2)$ al $FIRST(X)$.
 \end{enumerate}
 
-\subsubsection{$FOLLOW$}
+\subsection{$FOLLOW$}
 Data una grammatica e una \textbf{variabile} $A$.\\
 $FOLLOW(A)$(insieme dei \textbf{seguiti}) è l'insieme dei terminali con cui \textit{iniziano} le stringhe che seguono $A$ nelle derivazioni.\\
 Formalmente:
@@ -336,7 +388,7 @@ Formalmente:
     \item se $A \implies \alpha B \beta$ o $A \implies \alpha B \beta$ e $FIRST(\beta)$ contiene $\epsilon$ allora \textbf{aggiungi} $FOLLOW(A)$ al $FOLLOW(B)$.
 \end{enumerate}
 
-\subsubsection{Insieme Guida}
+\subsection{Insieme Guida}
 L'\textbf{Insieme Guida} di una produzione (es. $A \rightarrow \alpha$) indica l'\textbf{insieme dei TERMINALI} con cui iniziano le stringhe generabili partendo dalla produzione stessa (\$ se ci si trova alla fine della parola).\\
 Sostanzialmente serve a capire quali sono le \textbf{iniziali} (terminali, ad es. $a,b,c,\dots$) delle stringhe che si possono generare da una specifica produzione.
 \begin{itemize}
@@ -470,7 +522,7 @@ siccome $P$ dipende da $Q$ che è alla sua \textbf{destra}.
 \section{DOMANDE}
 \subsection{Quando una grammatica è LL(1)?}
 Se per ogni coppia di produzioni a partire da uno stesso simbolo non terminale $A:\\
-A\implies alpha$ e $A \implies \beta$, si ha\\
+A\implies \alpha$ e $A \implies \beta$, si ha\\
 $GUI(A \implies \alpha) \cap GUI(A \implies \beta) = \Phi$.\\
 Ovvero, gli \textbf{insiemi guida} $GUI()$ di un simbolo con due produzioni distinte non coincidono (non hanno elementi in comune).
 
